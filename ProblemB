@@ -1,0 +1,53 @@
+using System;
+
+namespace ProblemB
+{
+    class Program
+    {
+        const int MaxWordIndex = 3;
+
+        static void Main()
+        {
+            string text = Console.ReadLine();
+            string word = Console.ReadLine();
+            Console.WriteLine(CanFormWord(text, word) ? "da" : "nu");
+        }
+
+        static bool CanFormWord(string text, string word)
+        {
+            string[] words = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            return CanFormWordRecursive(words, word, 0, 0);
+        }
+
+        static bool CanFormWordRecursive(string[] words, string targetWord, int wordIndex, int targetIndex)
+        {
+            if (targetIndex == targetWord.Length)
+            {
+                return true;
+            }
+
+            if (wordIndex == words.Length)
+            {
+                return false;
+            }
+
+            for (int len = 1; len <= MaxWordIndex; len++)
+            {
+                if (targetIndex + len <= targetWord.Length && words[wordIndex].Length >= len)
+                {
+                    if (targetWord.Substring(targetIndex, len).ToLower() != words[wordIndex].Substring(0, len).ToLower())
+                    {
+                        continue;
+                    }
+
+                    if (CanFormWordRecursive(words, targetWord, wordIndex + 1, targetIndex + len))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
+}
